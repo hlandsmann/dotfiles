@@ -1,0 +1,53 @@
+# /etc/skel/.bashrc
+#
+# This file is sourced by all *interactive* bash shells on startup,
+# including some apparently interactive shells such as scp and rcp
+# that can't tolerate any output.  So make sure this doesn't display
+# anything or bad things will happen !
+
+
+# Test for an interactive shell.  There is no need to set anything
+# past this point for scp and rcp, and it's important to refrain from
+# outputting anything in those cases.
+if [[ $- != *i* ]] ; then
+	# Shell is non-interactive.  Be done now!
+	return
+fi
+
+alias ggrep='git --no-pager grep --recurse-submodules'
+export EDITOR=/usr/bin/nvim
+
+export TERM=xterm
+
+# Put your fun stuff here.
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+### history stuff begin <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# Avoid duplicates
+HISTCONTROL=ignoredups:erasedups
+# When the shell exits, append to the history file instead of overwriting it
+shopt -s histappend
+export HISTSIZE=100000                   # big big history
+export HISTFILESIZE=100000               # big big history
+# After each command, append to the history file and reread it
+#PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a;"
+### history stuff end >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+PATH="/home/harmen/Android/Sdk/ndk-bundle:$PATH"
+PATH="/home/harmen/Android/Sdk/tools:$PATH"
+PATH="/home/harmen/Android/Sdk/platform-tools:$PATH"
+PATH="/home/harmen/.local/bin:$PATH"
+export ANDROID_HOME="/home/harmen/Android/Sdk"
+export ANDROID_NDK_HOME="/home/harmen/Android/Sdk/ndk-bundle"
+
+alias deploy='~/scripts/deploy.sh'
+alias login='~/scripts/login.sh'
+alias animechecksum='python ~/scripts/animechecksum.py'
+alias mssh='~/scripts/mssh.sh'
+alias alarm='~/scripts/playalarm.sh'
