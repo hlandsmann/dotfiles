@@ -17,6 +17,7 @@ local opt = vim.opt
 -- enable fold with treesitter, autocommand zR to open all folds
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.conceallevel = 0
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost", "BufNewFile" }, {
   pattern = { "*" },
