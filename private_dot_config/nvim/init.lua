@@ -8,21 +8,29 @@ require("config.lazy")
 require("tokyonight").setup()
 -- require("scrollbar").setup()
 
-vim.g.everforest_background = "hard"
-vim.cmd("colorscheme everforest")
+-- vim.g.everforest_background = "hard"
+-- vim.cmd("colorscheme everforest")
+vim.lsp.set_log_level("trace")
+-- local opt = vim.opt
+-- vim.treesitter.language.register('devicetree', 'dtso')
+-- local parsers = require "nvim-treesitter.parsers"
+--
+-- local parser_config = parsers.get_parser_configs()
+-- parser_config.devicetree.filetype_to_parsername = "dtso"
 
-local vim = vim
-local opt = vim.opt
+-- require 'lspconfig'.clangd.setup {
+--   cmd = { "clangd", "--background-index", "--log=verbose" },
+--   -- capabilities = capabilities
+-- }
 
--- enable fold with treesitter, autocommand zR to open all folds
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.conceallevel = 0
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost", "BufNewFile" }, {
-  pattern = { "*" },
-  -- callback = function()
-  --   vim.api.nvim_feedkeys("zR", "n", true)
-  -- end,
-  command = "set foldlevel=99",
-})
+-- -- vim.api.nvim_create_autocmd({ "BufRead", "BufReadPost", "BufNewFile" }, {
+-- vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged" }, {
+--   pattern = { "*" },
+--   callback = function()
+--     vim.lsp.semantic_tokens_full()
+--   end,
+--   -- command = "set foldlevel=99",
+-- })
+-- if &filetype == "cpp" || &filetype == "cuda" || &filetype == "c"
+--   autocmd BufEnter,TextChanged <buffer> lua require 'vim.lsp.buf'.semantic_tokens_full()
+-- endif

@@ -1,8 +1,8 @@
 return {
   -- disabled:
-  { "echasnovski/mini.pairs", enabled = false },
-  { "ggandor/flit.nvim", enabled = false },
-  { "echasnovski/mini.comment", enabled = false },
+  { "echasnovski/mini.comment",                    enabled = false },
+  { "echasnovski/mini.pairs",                      enabled = false },
+  { "ggandor/flit.nvim",                           enabled = false },
   -- enabled:
   { "dstein64/nvim-scrollview" },
   { "ggandor/leap.nvim" },

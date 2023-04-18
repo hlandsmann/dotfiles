@@ -19,7 +19,7 @@ M.config = function()
   local null_ls = require("null-ls")
   local formatting = null_ls.builtins.formatting
   null_ls.setup({
-    sources = { formatting.blue.with({ extra_args = { "--line-length=110" } }) },
+    sources = { formatting.black.with({ extra_args = { "--line-length=110" } }) },
   })
 end
 return M
