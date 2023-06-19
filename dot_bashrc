@@ -43,6 +43,10 @@ PATH="/home/harmen/Android/Sdk/ndk-bundle:$PATH"
 PATH="/home/harmen/Android/Sdk/tools:$PATH"
 PATH="/home/harmen/Android/Sdk/platform-tools:$PATH"
 PATH="/home/harmen/.local/bin:$PATH"
+PATH="/home/harmen/.local/share/pyenv:$PATH"
+PATH="/home/harmen/.local/share/pyenv/bin:$PATH"
+PATH="/home/harmen/.cargo/bin:$PATH"
+activate
 export ANDROID_HOME="/home/harmen/Android/Sdk"
 export ANDROID_NDK_HOME="/home/harmen/Android/Sdk/ndk-bundle"
 
