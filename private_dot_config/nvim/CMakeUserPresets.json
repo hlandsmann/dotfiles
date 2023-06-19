@@ -1,0 +1,32 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "target-debug",
+            "displayName": "target (aarch64) debug",
+            "description": "Debug build for aarch64",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/BUILD/sdk_v1.19.0/aarch64_Debug/",
+            "toolchainFile": "${sourceDir}/cmake/toolchain_boexli_aarch64.cmake",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "target-release",
+            "displayName": "target (aarch64) release",
+            "description": "Release build for aarch64",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/BUILD/sdk_v1.19.0/aarch64_Release/",
+            "toolchainFile": "${sourceDir}/cmake/toolchain_boexli_aarch64.cmake",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ]
+}
