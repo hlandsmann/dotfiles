@@ -12,7 +12,8 @@ end
 local wk = require("which-key")
 
 map("v", "Y", '"+y', { desc = "yank to clipboard" })
-map("n", "<leader>ct", "<cmd>lcd!- | lcd build | terminal<cr>", { desc = "open terminal; cd build" })
+-- map("n", "<leader>ct", "<cmd>lcd!- | lcd build | terminal<cr>", { desc = "open terminal; cd build" })
+map("n", "<leader>t", require'builder'.toggle_terminal, { desc = "Toggle build terminal" })
 map("n", "<leader>cT", "<cmd>lcd!- | terminal<cr>", { desc = "open terminal" })
 map("n", "<leader>cb", "<cmd>lcd!- | lcd build | te ninja<cr>", { desc = "build, and exit" })
 map("n", "<leader>ch", require("builder").configure_build, { desc = "my ninja_call plugin" })

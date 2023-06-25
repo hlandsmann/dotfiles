@@ -8,6 +8,7 @@ return {
   { import = 'plugins.editor' },
   { import = 'plugins.lsp' },
   { import = 'plugins.ui' },
+  { import = 'plugins.startup' },
   { "dstein64/nvim-scrollview" },
   { "nvim-telescope/telescope-live-grep-args.nvim" },
 }

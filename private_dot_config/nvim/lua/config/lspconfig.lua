@@ -1,23 +1,33 @@
+local custom_lsp = {}
 local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
-lspconfig.clangd.setup {
-  cmd = {
-    'clangd',
-    '--clang-tidy',
-    "--all-scopes-completion",
-    "--cross-file-rename",
-    "--completion-style=detailed",
-    "--header-insertion-decorators",
-    "--header-insertion=iwyu",
-    "--pch-storage=memory",
-    -- '--background-index',
-    -- '--log=verbose'
-  },
-  settings = {
-    clangd = { path = '/usr/lib/llvm/16/clangd' },
-  },
-  capabilities = capabilities,
-}
+
+custom_lsp.setup_clangd = function(compile_commands_dir)
+  local setup = {
+    cmd = {
+      'clangd',
+      '--clang-tidy',
+      "--all-scopes-completion",
+      "--cross-file-rename",
+      "--completion-style=detailed",
+      "--header-insertion-decorators",
+      "--header-insertion=iwyu",
+      "--pch-storage=memory",
+      -- '--background-index',
+      -- '--log=verbose'
+    },
+    settings = {
+      clangd = { path = '/usr/lib/llvm/16/clangd' },
+    },
+    capabilities = capabilities,
+  }
+  if compile_commands_dir ~= nil then
+    table.insert(setup.cmd, "--compile-commands-dir=" .. compile_commands_dir)
+  end
+  lspconfig.clangd.setup(setup)
+end
+
+custom_lsp.setup_clangd()
 
 lspconfig.lua_ls.setup {
   settings = {
@@ -55,3 +65,5 @@ lspconfig.cmake.setup {
 }
 
 lspconfig.pyright.setup {}
+
+return custom_lsp
