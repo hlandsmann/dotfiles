@@ -35,7 +35,7 @@ builder.apply_selection = function(name)
   for _, v in pairs(builder.configurePresets) do
     if name == v.name then builder.selected = v end
   end
-  vim.g.build_directory = builder.get_build_directory()
+
   if builder.terminal ~= nil then
     -- builder.terminal:change_dir(builder.get_build_directory())
     builder.terminal:send('cd ' .. builder.get_build_directory())
@@ -75,7 +75,7 @@ builder.set_compile_commands = function()
   custom_lsp.setup_clangd(builder.get_build_directory())
 end
 
-builder.configure_build = function()
+builder.configure_build = function(build_mode)
   -- log.open_buffer()
   local cmake_presets = builder.get_cmake_presets()
   if cmake_presets == nil then return end
@@ -86,7 +86,11 @@ builder.configure_build = function()
     options[i] = v.name
   end
   builder.configurePresets = cmake_presets.configurePresets
-  builder.selection("architecture, mode", options)
+  if build_mode == nil then
+    builder.selection("architecture, mode", options)
+  else
+    builder.apply_selection(build_mode)
+  end
 end
 
 builder.get_build_directory = function()

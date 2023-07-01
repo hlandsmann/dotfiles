@@ -10,10 +10,9 @@ local function map(mode, lhs, rhs, opts)
   end
 end
 local wk = require("which-key")
-
 map("v", "Y", '"+y', { desc = "yank to clipboard" })
 -- map("n", "<leader>ct", "<cmd>lcd!- | lcd build | terminal<cr>", { desc = "open terminal; cd build" })
-map("n", "<leader>t", require'builder'.toggle_terminal, { desc = "Toggle build terminal" })
+map("n", "<leader>t", require 'builder'.toggle_terminal, { desc = "Toggle build terminal" })
 map("n", "<leader>cT", "<cmd>lcd!- | terminal<cr>", { desc = "open terminal" })
 map("n", "<leader>cb", "<cmd>lcd!- | lcd build | te ninja<cr>", { desc = "build, and exit" })
 map("n", "<leader>ch", require("builder").configure_build, { desc = "my ninja_call plugin" })
@@ -57,11 +56,7 @@ map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window wi
 map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 
 -- lsp
-wk.register({
-  c = {
-    name = "code",
-  },
-}, { prefix = "<leader>" })
+wk.register({ c = { name = "code", }, }, { prefix = "<leader>" })
 wk.register({ g = { name = "GoTo" } })
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 map("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp Info" })
@@ -94,6 +89,18 @@ end, { noremap = true, desc = "rg, but with options" })
 local lazyterm = function() Util.float_term(nil, { cwd = Util.get_root() }) end
 map("n", "<leader>fT", lazyterm, { desc = "Terminal (root dir)" })
 map("n", "<leader>ft", function() Util.float_term() end, { desc = "Terminal (cwd)" })
+
+-- help
+wk.register({ h = { name = "help", }, }, { prefix = "<leader>" })
+map("n", "<leader>ha", "<cmd>Telescope autocommands<cr>", { desc = "Auto Commands" })
+map("n", "<leader>hk", "<cmd>Telescope keymaps<cr>", { desc = "Key Maps" })
+
+-- session
+wk.register({ s = { name = "session", }, }, { prefix = "<leader>" })
+map("n", "<leader>sl", function() require('telescope').extensions.possession.list() end,
+  { desc = "load session telescope" })
+map("n", "<leader>ss", function() require'plugins.startup.possession'.session_save() end, { desc = "session save"})
+map("n", "<leader>sn", function() require'plugins.startup.possession'.session_save_new() end, { desc = "session save"})
 
 -- misc
 map("n", "<leader><tab><tab>", "<cmd>tabnew %<cr>", { desc = "New Tab" })
