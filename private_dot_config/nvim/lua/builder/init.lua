@@ -9,7 +9,69 @@ local util = require 'misc.util'
 local custom_lsp = require 'config.lspconfig'
 local log = require 'builder.debugbuf'
 
-builder.selection = function(title, choice, opts)
+local get_json = function(json_fn)
+  local f = assert(io.open(json_fn, "r"))
+  local content = f:read("*all")
+  f:close()
+  return vim.json.decode(content)
+end
+
+local get_cmake_presets_filename = function(workspace_dir)
+  local user_presets_fn = workspace_dir .. "/CMakeUserPresets.json"
+  local presets_fn = vim.fn.getcwd() .. "/CMakePresets.json"
+  if util.file_exists(user_presets_fn) then
+    return user_presets_fn
+  elseif util.file_exists(presets_fn) then
+    return presets_fn
+  else
+    print("CMake[User]Presets" .. " does not exist!")
+    return nil
+  end
+end
+
+local get_cmake_presets = function(workspace_dir)
+  local cmake_presets_fn = get_cmake_presets_filename(workspace_dir)
+  if not cmake_presets_fn then
+    return
+  end
+  return get_json(cmake_presets_fn)
+end
+
+local get_configurePresets = function(workspace_dir)
+  local cmake_presets = get_cmake_presets(workspace_dir)
+  if cmake_presets == nil then return nil end
+  return cmake_presets.configurePresets
+end
+
+
+Builder = {
+  terminal = nil,
+  selected = nil,
+  configurePresets = nil,
+  workspace_dir = nil,
+}
+
+local obj = nil
+function Builder.get(cwd)
+  if obj ~= nil and cwd == nil then return obj end
+
+  cwd = cwd or vim.fn.getcwd()
+  print("cwd is: " .. (cwd or "nil"))
+  obj = Builder
+  obj.workspace_dir = cwd
+  obj.configurePresets = get_configurePresets(cwd)
+  obj.selected = nil
+  obj.terminal = nil
+  return obj
+end
+
+function Builder:close()
+  if self.terminal == nil then return end
+  if self.terminal:is_open() then self.terminal:close() end
+  -- obj = nil
+end
+
+function Builder:select_build_mode(title, choice, opts)
   opts = opts or {}
   pickers.new(opts, {
     prompt_title = title,
@@ -24,94 +86,69 @@ builder.selection = function(title, choice, opts)
         -- print(vim.inspect(selection))
 
         -- log.log(selection[1])
-        builder.apply_selection(selection[1])
+        self:apply_selection(selection[1])
       end)
       return true
     end,
   }):find()
 end
 
-builder.apply_selection = function(name)
-  for _, v in pairs(builder.configurePresets) do
-    if name == v.name then builder.selected = v end
+function Builder:set_compile_commands()
+  custom_lsp.setup_clangd(self:get_build_directory())
+end
+
+function Builder:apply_selection(name)
+  for _, v in pairs(self.configurePresets) do
+    if name == v.name then self.selected = v end
   end
 
-  if builder.terminal ~= nil then
-    -- builder.terminal:change_dir(builder.get_build_directory())
-    builder.terminal:send('cd ' .. builder.get_build_directory())
+  if self.terminal ~= nil then
+    self.terminal:send('cd ' .. self:get_build_directory())
   end
-  builder.set_compile_commands()
+  self:set_compile_commands()
 end
 
-builder.get_json = function(json_fn)
-  local f = assert(io.open(json_fn, "r"))
-  local content = f:read("*all")
-  f:close()
-  return vim.json.decode(content)
-end
-
-builder.get_cmake_presets_file = function()
-  local user_presets_fn = vim.fn.getcwd() .. "/CMakeUserPresets.json"
-  local presets_fn = vim.fn.getcwd() .. "/CMakePresets.json"
-  if util.file_exists(user_presets_fn) then
-    return user_presets_fn
-  elseif util.file_exists(presets_fn) then
-    return presets_fn
-  else
-    print("CMake[User]Presets" .. " does not exist!")
-    return nil
-  end
-end
-
-builder.get_cmake_presets = function()
-  local cmake_presets_fn = builder.get_cmake_presets_file()
-  if not cmake_presets_fn then
-    return
-  end
-  return builder.get_json(cmake_presets_fn)
-end
-
-builder.set_compile_commands = function()
-  custom_lsp.setup_clangd(builder.get_build_directory())
-end
-
-builder.configure_build = function(build_mode)
+function Builder:configure_build(build_mode)
   -- log.open_buffer()
-  local cmake_presets = builder.get_cmake_presets()
-  if cmake_presets == nil then return end
-  if cmake_presets.configurePresets == nil then return end
+  -- log.log("build mode is: " .. (build_mode or "nil"))
+  -- print("build mode is: " .. (build_mode or "nil"))
+
+  if self.configurePresets == nil then return end
   local options = {}
 
-  for i, v in pairs(cmake_presets.configurePresets) do
-    options[i] = v.name
-  end
-  builder.configurePresets = cmake_presets.configurePresets
   if build_mode == nil then
-    builder.selection("architecture, mode", options)
+    for i, v in pairs(self.configurePresets) do
+      options[i] = v.name
+    end
+    self:select_build_mode("architecture, mode", options)
   else
-    builder.apply_selection(build_mode)
+    self:apply_selection(build_mode)
   end
 end
 
-builder.get_build_directory = function()
-  if builder.selected == nil then
-    return vim.fn.getcwd()
+function Builder:get_build_directory()
+  if self.selected == nil then
+    return self.workspace_dir
   else
-    return builder.selected.binaryDir:gsub("${sourceDir}", vim.fn.getcwd())
+    return self.selected.binaryDir:gsub("${sourceDir}", self.workspace_dir)
   end
 end
 
-builder.toggle_terminal = function()
+function Builder:toggle_terminal()
   -- log.open_buffer()
-  if builder.terminal == nil then
+  if self.terminal == nil then
     local terminal = require('toggleterm.terminal').Terminal
-    builder.terminal = terminal:new({
-      dir = builder.get_build_directory(),
+    -- log.log(self:get_build_directory())
+    self.terminal = terminal:new({
+      dir = self:get_build_directory(),
       -- window = vim.api.nvim_get_current_win(),
       direction = 'tab',
+      on_exit = function()
+        self.terminal = nil
+      end
     })
   end
-  builder.terminal:toggle()
+  self.terminal:toggle()
 end
 
-return builder
+return Builder

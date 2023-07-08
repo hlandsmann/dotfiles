@@ -41,11 +41,18 @@ M.config = function()
         end
       end,
       after_save = function(name, user_data, aborted) end,
-      before_load = function(name, user_data) return user_data end,
-      after_load = function(_, user_data)
+      before_load = function(name, user_data)
+        require 'builder'.get():close()
+        return user_data
+      end,
+      after_load = function(name, user_data)
+        local paths = require('possession.paths')
+        local path = paths.session(name)
+        local data = vim.json.decode(path:read())
+        local builder = require 'builder'.get(data.cwd)
+        -- print("data cwd :" .. (data.cwd or nil))
         if user_data.build_mode ~= nil then
-          local builder = require 'builder'
-          builder.configure_build(user_data.build_mode)
+          builder:configure_build(user_data.build_mode)
         end
       end,
     },

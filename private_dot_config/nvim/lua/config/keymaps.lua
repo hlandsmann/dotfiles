@@ -12,10 +12,10 @@ end
 local wk = require("which-key")
 map("v", "Y", '"+y', { desc = "yank to clipboard" })
 -- map("n", "<leader>ct", "<cmd>lcd!- | lcd build | terminal<cr>", { desc = "open terminal; cd build" })
-map("n", "<leader>t", require 'builder'.toggle_terminal, { desc = "Toggle build terminal" })
+map("n", "<leader>t", function() require 'builder'.get():toggle_terminal() end, { desc = "Toggle build terminal" })
 map("n", "<leader>cT", "<cmd>lcd!- | terminal<cr>", { desc = "open terminal" })
 map("n", "<leader>cb", "<cmd>lcd!- | lcd build | te ninja<cr>", { desc = "build, and exit" })
-map("n", "<leader>ch", require("builder").configure_build, { desc = "my ninja_call plugin" })
+map("n", "<leader>ch", function() require("builder").get():configure_build() end, { desc = "my ninja_call plugin" })
 map("t", "JK", "<C-\\><C-n>", { desc = "exit terminal" })
 
 -- git
@@ -99,8 +99,8 @@ map("n", "<leader>hk", "<cmd>Telescope keymaps<cr>", { desc = "Key Maps" })
 wk.register({ s = { name = "session", }, }, { prefix = "<leader>" })
 map("n", "<leader>sl", function() require('telescope').extensions.possession.list() end,
   { desc = "load session telescope" })
-map("n", "<leader>ss", function() require'plugins.startup.possession'.session_save() end, { desc = "session save"})
-map("n", "<leader>sn", function() require'plugins.startup.possession'.session_save_new() end, { desc = "session save"})
+map("n", "<leader>ss", function() require 'plugins.startup.possession'.session_save() end, { desc = "session save" })
+map("n", "<leader>sn", function() require 'plugins.startup.possession'.session_save_new() end, { desc = "session save" })
 
 -- misc
 map("n", "<leader><tab><tab>", "<cmd>tabnew %<cr>", { desc = "New Tab" })
