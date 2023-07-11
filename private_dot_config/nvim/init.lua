@@ -10,10 +10,17 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
--- require("lazy").setup(plugins, opts)
 
 require("config")
-require("lazy").setup('plugins')
+require("lazy").setup('plugins', {
+dev = {
+    -- directory where you store your local plugin projects
+    path = "~/src/nvim-plugins/",
+    ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
+    patterns = {}, -- For example {"folke"}
+    fallback = false, -- Fallback to git when local plugin doesn't exist
+  }
+})
 -- require('mason').setup()
 require 'config.mason-lspconfig'
 require 'config.lspconfig'
