@@ -24,6 +24,19 @@ function M.log(data)
   end
 end
 
+function M.dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. M.dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
+end
+
 function M.open_buffer()
   -- Get a boolean that tells us if the buffer number is visible anymore.
   --

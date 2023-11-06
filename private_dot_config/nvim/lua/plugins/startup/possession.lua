@@ -53,7 +53,10 @@ M.config = function()
         -- print("data cwd :" .. (data.cwd or nil))
         if user_data.build_mode ~= nil then
           builder:configure_build(user_data.build_mode)
+        else
+          builder:set_compile_commands()
         end
+        require'neocmake'.get():set_workspace_dir(data.cwd)
       end,
     },
     plugins = {

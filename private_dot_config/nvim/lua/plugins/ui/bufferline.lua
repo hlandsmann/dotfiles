@@ -1,6 +1,6 @@
 return {
   "akinsho/bufferline.nvim",
-  requires = 'nvim-tree/nvim-web-devicons',
+  dependencies = 'nvim-tree/nvim-web-devicons',
   event = "VeryLazy",
   keys = {
     { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>",            desc = "Toggle pin" },
@@ -14,6 +14,7 @@ return {
       right_mouse_command = function(n) require("mini.bufremove").delete(n, false) end,
       diagnostics = "nvim_lsp",
       always_show_bufferline = false,
+      separator_style = "slope",
       offsets = {
         {
           filetype = "neo-tree",

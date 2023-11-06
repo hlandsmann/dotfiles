@@ -15,7 +15,9 @@ map("v", "Y", '"+y', { desc = "yank to clipboard" })
 map("n", "<leader>t", function() require 'builder'.get():toggle_terminal() end, { desc = "Toggle build terminal" })
 map("n", "<leader>cT", "<cmd>lcd!- | terminal<cr>", { desc = "open terminal" })
 map("n", "<leader>cb", "<cmd>lcd!- | lcd build | te ninja<cr>", { desc = "build, and exit" })
-map("n", "<leader>ch", function() require("builder").get():configure_build() end, { desc = "my ninja_call plugin" })
+map("n", "<leader>ch", function() require("builder").get():configure_build() end, { desc = "select cmake build preset" })
+map("n", "<leader>ct", function() require("builder").get():cmake_targets() end, { desc = "configure cmake target" })
+map("n", "<leader>cm", "<cmd>NeoCMakeSelectBuildPreset<cr>", { desc = "select cmake build preset" })
 map("t", "JK", "<C-\\><C-n>", { desc = "exit terminal" })
 
 -- git
@@ -41,6 +43,7 @@ map("n", "<C-j>", "<C-w>j", { desc = "Go to lower window", remap = true })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to upper window", remap = true })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to right window", remap = true })
 
+-- buffer
 if Util.has("bufferline.nvim") then
   map("n", "<S-h>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
   map("n", "<S-l>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
@@ -48,6 +51,9 @@ else
   map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
   map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 end
+map("n", "gp", "<cmd>BufferLinePick<cr>", { desc = "go, pick Buffer (buffer pick)" })
+map("n", "gq", "<cmd>BufferLinePickClose<cr>", { desc = "go, quit Buffer (buffer close)" })
+
 
 -- Resize window using <ctrl> arrow keys
 map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
@@ -104,6 +110,7 @@ map("n", "<leader>sn", function() require 'plugins.startup.possession'.session_s
 
 -- misc
 map("n", "<leader><tab><tab>", "<cmd>tabnew %<cr>", { desc = "New Tab" })
+map("i", "jk", "<Esc>", { desc = "Escape" })
 map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 -- Clear search with <esc>
 map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
