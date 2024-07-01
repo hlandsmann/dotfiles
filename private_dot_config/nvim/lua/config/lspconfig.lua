@@ -5,11 +5,11 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 custom_lsp.setup_clangd = function(compile_commands_dir)
   local setup = {
     cmd = {
-      'clangd',
-      -- '/usr/lib/llvm/16/bin/clangd',
+      -- 'clangd',
+      '/usr/lib/llvm/17/bin/clangd',
       '--log=verbose',
       '--query-driver=**',
-      -- '--query-driver=/opt/riedel/boexli-SDK-aarch64-v1.26.0/sysroots/aarch64-riedel-linux',
+      -- '--query-driver=/opt/riedel/boexli-SDK-aarch64-v1.30.0/sysroots/aarch64-riedel-linux',
      -- '--query-driver=/opt/riedel/boexli-SDK-aarch64-v1.26.0/sysroots/x86_64-pokysdk-linux/usr/bin/aarch64-riedel-linux/aarch64-riedel-linux-gcc,/opt/riedel/boexli-SDK-aarch64-v1.26.0/sysroots/x86_64-pokysdk-linux/usr/bin/aarch64-riedel-linux/aarch64-riedel-linux-g++',
       -- '/media/2TB/misc/llvm-project/build/bin/clangd',
       -- '--clang-tidy',

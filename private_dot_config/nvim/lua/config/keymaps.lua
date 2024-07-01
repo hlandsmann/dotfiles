@@ -70,6 +70,7 @@ map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
 map("n", "<leader>cf", vim.lsp.buf.format, { desc = "Format buffer" })
 map("v", "<leader>cf", vim.lsp.buf.format, { desc = "Format selection" })
 map("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
+map("n", "gs", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "clang switch source header" })
 map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
 map("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature Help" })
 map("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
@@ -111,6 +112,7 @@ map("n", "<leader>sn", function() require 'plugins.startup.possession'.session_s
 -- misc
 map("n", "<leader><tab><tab>", "<cmd>tabnew %<cr>", { desc = "New Tab" })
 map("i", "jk", "<Esc>", { desc = "Escape" })
+map("i", "kj", "<Esc>", { desc = "Escape" })
 map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 -- Clear search with <esc>
 map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
